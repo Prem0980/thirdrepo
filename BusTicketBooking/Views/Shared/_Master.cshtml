@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Stylesheets/MyStylesheet.css" rel="stylesheet" />
+</head>
+<body style="margin: 0px;">
+
+    <div class="topnav">
+        <a>Home</a>
+        <a>Contact</a>
+        <a>Services</a>
+        <a style="float:right">Login</a>
+    </div>
+    @*<div style="width: 100px; height: 100px;">
+        <img src="~/Images/Buses.jpg" style="width: 100%; height: 100%;" />
+    </div>*@
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

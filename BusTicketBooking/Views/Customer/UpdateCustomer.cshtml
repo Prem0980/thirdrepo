@@ -1,0 +1,107 @@
+﻿@model BusTicketBooking.Models.CDetails
+@{
+    ViewBag.Title = "UpdateCustomer";
+}
+
+<h2>UpdateCustomer</h2>
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>CustomerID</td>
+            <td>
+                @Html.TextBoxFor(c => c.CustomerID, new { disabled = "disabled" })
+                @Html.Hidden("CustomerID", Model.CustomerID)
+
+            </td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>
+                @Html.TextBoxFor(c=>c.Name)
+
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>
+                @Html.TextBoxFor(c => c.Address)
+
+            </td>
+
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td>
+                @Html.TextBoxFor(c => c.Country, new { disabled = "disabled" })
+
+        </tr>
+
+        <tr>
+            <td>State</td>
+            <td>
+                @Html.TextBoxFor(c => c.State)
+            </td>
+
+        </tr>
+
+
+
+        <tr>
+            <td>District</td>
+            <td>@Html.TextBoxFor(c => c.City)</td>
+        </tr>
+        <tr>
+            <td>PinCode</td>
+            <td>@Html.TextBoxFor(c => c.Pincode)</td>
+
+        </tr>
+        <tr>
+            <td>EmailID</td>
+            <td>
+                @Html.TextBoxFor(c => c.EmailID)
+
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td>
+                @Html.TextBoxFor(c => c.Gender)
+
+            </td>
+        </tr>
+        <tr>
+            <td>ContactNumber</td>
+            <td>@Html.TextBoxFor(c => c.ContactNumber)</td>
+
+        </tr>
+        <tr>
+            <td>Date of birth</td>
+            <td>@Html.TextBoxFor(c => c.DateOfBirth)</td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                <input type="submit" />
+
+            </td>
+        </tr>
+
+
+    </table>
+
+    if (ViewBag.msg != null)
+    {
+        <font color="green">@ViewBag.msg</font>
+    }
+
+
+
+}
+

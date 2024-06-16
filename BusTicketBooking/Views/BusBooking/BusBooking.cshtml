@@ -1,0 +1,217 @@
+﻿@model BusTicketBooking.Models.BTicket 
+@{
+    ViewBag.Title = "BusBooking";
+}
+
+<h2>BusBooking</h2>
+<script>
+        function validateLocation() {
+            var fromLocation = document.getElementById("Schedule_Route_FromLocation").value;
+            var toLocation = document.getElementById("Schedule_Route_ToLocation").value;
+            if (fromLocation === toLocation) {
+                document.getElementById("Schedule_Route_ToLocation").setCustomValidity("From location and to location should not be same");
+            } else {
+                document.getElementById("Schedule_Route_ToLocation").setCustomValidity("");
+            }
+        }
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function f1() {
+
+
+        var fl = document.getElementById("fl").value;
+
+        var tl = document.getElementById("tl").value;
+        var dl = document.getElementById("dl").value;
+        dl = dl + "T00:00:00";
+        //alert(dl)
+        $.ajax({
+            url: "https://localhost:44337/api/BusBooking/getroute",
+            method: "GET",
+            success: function (getroute) {
+
+                var all = [];
+
+                for (var i = 0; i < getroute.length; i++) {
+
+                    if (getroute[i].FromLocation === fl && getroute[i].ToLocation === tl) {
+
+
+                        all.push(getroute[i]);
+                    }
+                }
+                //alert(all.length)
+                $.ajax({
+
+                    url: "https://localhost:44337/api/BusBooking/getschedule",
+
+                    method: "GET",
+
+                    success: function (getschedule) {
+
+                        var sid = [];
+                        for (var i = 0; i < getschedule.length; i++) {
+
+                            if (all.length != 0) {
+
+
+                                for (var j = 0; j < all.length; j++) {
+                                    if (all[j].RouteID === getschedule[i].RouteID && getschedule[i].DateOfJourney === dl) {
+
+                                        sid.push(getschedule[i]);
+                                    }
+
+                                }
+
+                            }
+                        }
+                        // alert(sid.length)
+                        $.ajax({
+                            url: "https://localhost:44337/api/BusBooking/getbus1",
+                            method: "GET",
+                            success: function (BusData) {
+                                var bid = [];
+
+                                for (var i = 0; i < BusData.length; i++) {
+                                    if (sid.length != 0) {
+
+                                        for (var j = 0; j < sid.length; j++) {
+                                            if (sid[j].BusID == BusData[i].BusID) {
+
+                                                bid.push(BusData[i]);
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                                alert(bid.length);
+
+                                var fd = "";
+
+                                for (var i = 0; i < bid.length; i++) {
+
+                                    fd = fd + '<input type="radio" name="busRadio" value="' + sid[i].ScheduleID +'"> ' + " BusID: " + bid[i].BusID + " BusName: " + bid[i].BusName + " Time: " + sid[i].Time + " Cost: " +
+
+                                        sid[i].Cost + " FromLocation: " + fl + " ToLocation: " + tl +" "+"Available seats"+sid[i].AvailableSeats+ "<br>";
+                                    fd = fd + '<input type="hidden" name="costValue" value="' + sid[i].Cost + '">';
+
+                                   
+                                   
+                                }
+                                $("#w").html(fd);
+                            },
+                            error: function (error) {
+                                console.error("Error fetching data from Bus API");
+                            }
+                        });
+                    },
+                    error: function (error) {
+                        console.error("Error fetching data from Schedule API");
+                    }
+
+
+                });
+
+
+            },
+            error: function (error) {
+                console.error("Error fetching data from Route API");
+            }
+        });
+    }
+    $(document).ready(function () {
+        $("input[type='submit']").prop('disabled', true);
+    });
+
+    // Enable/disable the "Select" button based on radio button selection
+    $(document).on('change', 'input[name="busRadio"]', function () {
+        if ($(this).is(':checked')) {
+            $("input[type='submit']").prop('disabled', false);
+        } else {
+            $("input[type='submit']").prop('disabled', true);
+        }
+    });
+
+</script>
+<style>
+    .error {
+        color: red;
+    }
+</style>
+<h2>BookTicket</h2>
+@using (Html.BeginForm("BusBooking1", "BusBooking"))
+{
+    <table>
+        <tr>
+            @if (ViewBag.FromLocation == null)
+            {
+
+                <td>
+                    From Location
+                </td>
+                <td>
+                    @Html.DropDownListFor(c => c.Schedule.Route.FromLocation, Enumerable.Empty<SelectListItem>(), "Select")
+                </td>
+                <td class="error">@Html.ValidationMessageFor(c => c.Schedule.Route.FromLocation)</td>
+
+            }
+            else
+            {
+
+                <td>
+                    From Location
+                </td>
+                <td>
+                    @Html.DropDownListFor(c => c.Schedule.Route.FromLocation, new SelectList(ViewBag.FromLocation), "Select", new { @onchange = "validateLocation()", @id = "fl" })
+                </td>
+                <td class="error">@Html.ValidationMessageFor(c => c.Schedule.Route.FromLocation)</td>
+
+            }
+            @if (ViewBag.ToLocation == null)
+            {
+
+                <td>
+                    To Location
+                </td>
+                <td>
+                    @Html.DropDownListFor(c => c.Schedule.Route.ToLocation, Enumerable.Empty<SelectListItem>(), "Select")
+                </td>
+                <td class="error">@Html.ValidationMessageFor(c => c.Schedule.Route.ToLocation)</td>
+
+            }
+            else
+            {
+
+                <td>
+                    To Location
+                </td>
+                <td>
+                    @Html.DropDownListFor(c => c.Schedule.Route.ToLocation, new SelectList(ViewBag.ToLocation), "Select", new { @onchange = "validateLocation()", @id = "tl" })
+                </td>
+                <td class="error">@Html.ValidationMessageFor(c => c.Schedule.Route.ToLocation)</td>
+
+            }
+
+
+            <td>Date Of Journey</td>
+            <td>@Html.TextBoxFor(c => c.Schedule.DateOfJourney, new { type = "date", @id = "dl" })</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.Schedule.DateOfJourney)</td>
+            <td> <input type="button" onclick="f1()" value="Search" /></td>
+        </tr>
+        @*<tr>
+                <td><input type="submit" class="btn btn-primary btn-lg active" value="Select" /></td>
+
+            </tr>*@
+    </table>
+    <div id="w"style="margin-bottom:auto;">
+
+    </div>
+    <input type="submit" class="btn btn-primary btn-lg active" value="Select" />
+}
+

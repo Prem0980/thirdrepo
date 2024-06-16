@@ -1,0 +1,116 @@
+﻿@model BusTicketBooking.Models.ScheduleDetails
+@{
+    ViewBag.Title = "AddNewSchedule";
+}
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+<h2>AddNewSchedule</h2>
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>ScheduleID</td>
+            <td>
+                @Html.TextBoxFor(c => c.ScheduleID, new { disabled = "disabled" })
+                @Html.Hidden("sch", Model.ScheduleID)
+            </td>
+            <td class="error">@Html.ValidationMessageFor(c => c.ScheduleID)</td>
+        </tr>
+        @if (ViewBag.routeids == null)
+        {
+            <tr>
+                <td>RouteID</td>
+                <td>@Html.DropDownListFor(c => c.RouteID, Enumerable.Empty<SelectListItem>(), "select")</td>
+                <td class="error">@Html.ValidationMessageFor(c => c.RouteID)</td>
+            </tr>
+
+        }
+        else
+        {
+            <tr>
+                <td>RouteId</td>
+                <td>@Html.DropDownListFor(c => c.RouteID, new SelectList(ViewBag.routeids), "select")</td>
+                <td class="error">@Html.ValidationMessageFor(c => c.RouteID)</td>
+            </tr>
+        }
+        @if (ViewBag.busids == null)
+        {
+            <tr>
+                <td>BusID</td>
+                <td>@Html.DropDownListFor(c => c.BusID, Enumerable.Empty<SelectListItem>(), "select")</td>
+                <td class="error">@Html.ValidationMessageFor(c => c.BusID)</td>
+            </tr>
+
+        }
+        else
+        {
+            <tr>
+                <td>BusId</td>
+                <td>@Html.DropDownListFor(c => c.BusID, new SelectList(ViewBag.busids), "select")</td>
+                <td class="error">@Html.ValidationMessageFor(c => c.BusID)</td>
+            </tr>
+        }
+        <tr>
+            <td>AvailableSeats</td>
+            <td>@Html.TextBoxFor(c => c.AvailableSeats, new { Value = "" ,disabled="disabled"})</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.AvailableSeats)</td>
+        </tr>
+        <tr>
+            <td>Time</td>
+            <td>@Html.TextBoxFor(c => c.Time, new { type = "Time" })</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.Time)</td>
+        </tr>
+        <tr>
+            <td>DateOfJourney  </td>
+            <td>@Html.TextBoxFor(c => c.DateOfJourney, new { type = "date" })</td>
+
+            <td class="error">@Html.ValidationMessageFor(c => c.DateOfJourney)</td>
+        </tr>
+        <tr>
+            <td>Cost</td>
+            <td>@Html.TextBoxFor(c => c.Cost, new { Value = "" })</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.Cost)</td>
+        </tr>
+        <tr>
+            <td> <input type="submit" /></td>
+        </tr>
+    </table>
+    <div>
+        @if (ViewBag.msg != null)
+        {
+            <font color="red">@ViewBag.msg</font>
+        }
+        @if (ViewBag.msg1 != null)
+        {
+            <font color="green">@ViewBag.msg1</font>
+        }
+    </div>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#BusID").blur(function () {
+            
+            
+            $.ajax({
+               method: "GET",
+                url: "https://localhost:44337/api/BusBooking/getavailableseats/"+$("#BusID").val(),
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (msg)
+                {
+                    var availableSeatsValue = msg;
+                    $('#AvailableSeats').val(availableSeatsValue);
+                    
+                }
+            });
+        });
+    });
+    </script>
+    
+

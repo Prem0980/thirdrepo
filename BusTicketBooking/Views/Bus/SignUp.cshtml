@@ -1,0 +1,101 @@
+﻿@model BusTicketBooking.Models.CDetails
+@{
+    ViewBag.Title = "SignUp";
+}
+<style>
+    .error {
+        color: red;
+    }
+</style>
+@using (Html.BeginForm("SignUp1", "Bus"))
+{
+    <table>
+        <tr>
+            <td>CustomerID</td>
+            <td>
+                @Html.TextBoxFor(c => c.CustomerID, new { disabled = "disabled" })
+            @Html.Hidden("custId", Model.CustomerID)
+        </td>
+    </tr>
+    <tr>
+        <td>Name</td>
+        <td>@Html.TextBoxFor(c=>c.Name)</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.Name)</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>@Html.TextBoxFor(c => c.Address)</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.Address)</td>
+    </tr>
+
+
+    <tr>
+        <td>Country</td>
+        <td>@Html.TextBoxFor(c => c.Country)</td>
+
+    </tr>
+    <tr>
+        <td>State</td>
+        <td>@Html.TextBoxFor(c => c.State)</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.State)</td>
+    </tr>
+    <tr>
+        <td>District</td>
+        <td>@Html.TextBoxFor(c => c.City)</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.City)</td>
+    </tr>
+    <tr>
+        <td>PinCode</td>
+        <td>@Html.TextBoxFor(c => c.Pincode, new { Value = " " })</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.Pincode)</td>
+    </tr>
+    <tr>
+        <td>EmailID</td>
+        <td>@Html.TextBoxFor(c => c.EmailID)</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.EmailID)</td>
+    </tr>
+    <tr>
+        <td>Gender</td>
+        <td>
+            @Html.RadioButtonFor(c => c.Gender, "Male")Male
+            @Html.RadioButtonFor(c => c.Gender, "Female")Female
+            @Html.RadioButtonFor(c => c.Gender, "others")Others
+        </td>
+        <td class="error">@Html.ValidationMessageFor(c => c.Gender)</td>
+    </tr>
+    <tr>
+        <td>ContactNumber</td>
+        <td>@Html.TextBoxFor(c => c.ContactNumber, new { Value = " " })</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.ContactNumber)</td>
+    </tr>
+    <tr>
+        <td>Date of birth</td>
+        <td>@Html.TextBoxFor(c => c.DateOfBirth, new { type = "date" })</td>
+        <td class="error">@Html.ValidationMessageFor(c => c.DateOfBirth)</td>
+    </tr>
+    <tr>
+        <td>CustomerPassword</td>
+        <td>@Html.Password("Customerpassword")</td>
+        <td class="error">
+            @Html.ValidationMessage("Customerpassword")
+            @if (ViewBag.msg != null)
+            {
+                <font color="red">@ViewBag.msg</font>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>ConfirmPassword</td>
+        <td>@Html.Password("ConfirmPassword")</td>
+        <td class="error">
+            @Html.ValidationMessage("ConfirmPassword")
+            @if (ViewBag.msg != null)
+            {
+                <font color="red">@ViewBag.msg</font>
+            }
+        </td>
+    </tr>
+</table>
+
+<input type="submit" />
+}

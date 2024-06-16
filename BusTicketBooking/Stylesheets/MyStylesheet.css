@@ -1,0 +1,19 @@
+﻿* {
+    box-sizing: border-box;
+}
+.topnav {
+    overflow: hidden;
+    background-color: #ddd;
+}
+    .topnav a {
+        float: left;
+        display: block;
+        color: #000000;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }

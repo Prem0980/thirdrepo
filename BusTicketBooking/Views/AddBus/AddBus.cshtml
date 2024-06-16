@@ -1,0 +1,57 @@
+﻿@model BusTicketBooking.Models.Bus
+@{
+    ViewBag.Title = "AddBus";
+}
+
+<h2>AddBus</h2>
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>BusID</td>
+            <td>@Html.TextBoxFor(c => c.BusID)</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.BusID)</td>
+        </tr>
+        <tr>
+            <td>BusName</td>
+            <td>@Html.TextBoxFor(c => c.BusName)</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.BusName)</td>
+        </tr>
+
+        <tr>
+            <td>BusType</td>
+            <td>@Html.DropDownListFor(c => c.BusType, new List<SelectListItem>
+    {
+        new SelectListItem { Text = "AC", Value = "AC" },
+        new SelectListItem { Text = "NonAC", Value = "NonAC" },
+        new SelectListItem { Text = "Sleeper", Value = "Sleeper" },
+        new SelectListItem { Text = "Semi-Sleeper", Value = "Semi-Sleeper" },
+       new SelectListItem { Text = "Semi-Seater", Value = "Semi-Seater" },
+       new SelectListItem { Text = "Seater", Value = "Seater" },
+    }, "Select")</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.BusType)</td>
+        </tr>
+        <tr>
+            <td>Capacity</td>
+            <td>@Html.TextBoxFor(c => c.Capacity)</td>
+            <td class="error">@Html.ValidationMessageFor(c => c.Capacity)</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" />
+            </td>
+        </tr>
+    </table>
+    <div>
+            @if (ViewBag.msg != null)
+            {
+                <font color="red">@ViewBag.msg</font>
+            }
+            @if (ViewBag.msg1 != null)
+                {
+                    <font color="green">@ViewBag.msg1</font>
+                }
+    </div>
+
+}
+

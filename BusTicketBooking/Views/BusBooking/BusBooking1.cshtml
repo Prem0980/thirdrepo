@@ -1,0 +1,158 @@
+﻿@model BusTicketBooking.Models.BTicket
+
+@{
+    ViewBag.Title = "BusBooking1";
+}
+
+<h2>BusBooking1</h2>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Information</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        #passengerDetails {
+            display: none;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 5px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    @using (Html.BeginForm("BusBooking2", "BusBooking"))
+    {
+        <table>
+
+            <tr>
+                <td>TicketID</td>
+                <td>
+                    @Html.TextBoxFor(c => c.TicketID, new { disabled = "disabled" })
+                    @Html.Hidden("TicketID", Model.TicketID)
+                    @Html.Hidden("ScheduleId", Model.ScheduleId)
+                    @Html.Hidden("DateOfBooking",Model.DateOfBooking)
+                </td>
+            </tr>
+            <tr>
+                <td>CustomerID</td>
+                <td>@Html.TextBoxFor(c => c.CustomerID, new { Value = Session["user"] })</td>
+                <td class="error">@Html.ValidationMessageFor(c => c.CustomerID)</td>
+            </tr>
+            <tr>
+                <td>NumberOfTickets</td>
+
+                <td>
+
+                    @Html.DropDownListFor(c => c.NumberOfTickets, new List<SelectListItem>
+                    {
+                        new SelectListItem{Text="1",Value="1"},
+                        new SelectListItem{Text="2",Value="2"},
+                        new SelectListItem{Text="3",Value="3"},
+                        new SelectListItem{Text="4",Value="4"},
+                    }, "select", new { @id = "ticketDropdown" })
+                </td>
+                <td class="error">
+                    @Html.ValidationMessageFor(c => c.NumberOfTickets)
+                </td>
+            </tr>
+            <tr><td colspan="2"><input type="submit" value="Submit" style="margin-left:280px;" /></td></tr>
+
+        </table>
+        @Html.Hidden("costValue",Model.ScheduleId)
+
+
+        <div id="passengerDetails">
+            <h2>Passenger Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Passenger ID</th>
+                        <th>Passenger Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                    </tr>
+                </thead>
+                <tbody id="passengerDetailsBody"></tbody>
+            </table>
+        </div>
+        <div>
+
+        </div>
+    }
+    <script>
+        $(document).ready(function () {
+            $("#ticketDropdown").on("change", function () {
+                var selectedTickets = $(this).val();
+                generatePassengerRows(selectedTickets);
+                $("#passengerDetails").show();
+            });
+
+            function generatePassengerRows(numRows) {
+                var passengerDetailsBody = $("#passengerDetailsBody");
+                passengerDetailsBody.empty();
+
+                for (var i = 1; i <= numRows; i++) {
+
+                    var row = $("<tr>").html(`
+                                    <td>@Html.TextBoxFor(c => c.Passengers.PassengerID ,new { Value ="` + i+ `" })
+                                        </td>
+                                    <td>@Html.TextBoxFor(c => c.Passengers.Name)</td>
+                                    <td>@Html.TextBoxFor(c => c.Passengers.Age)</td>
+
+                                    <td>@Html.DropDownListFor(c => c.Passengers.Gender, new List<SelectListItem>
+{
+    new SelectListItem{Text="Male",Value="Male"},
+    new SelectListItem{Text="Female",Value="Female"},
+    new SelectListItem{Text="Others",Value="Others"},
+
+}, "select")</td></tr>`);
+
+                    passengerDetailsBody.append(row);
+
+                }
+                $("#passengerDetailsBody").append(passengerDetailsBody);
+            }
+        });
+    </script>
+    <table id="passengerDetailsBody">
+    </table>
+    @if (ViewBag.msg1 != null)
+    {
+        <font color="green">@ViewBag.msg1</font>
+    }
+    @if (ViewBag.msg != null)
+    {
+        <font color="red">@ViewBag.msg</font>
+    }
+</body>
+
+</html>
